@@ -1,0 +1,26 @@
+{
+  "name": "moneymaker",
+  "version": "1.0.0",
+  "devDependencies": {
+    "coffee-script": "*",
+    "node-sass": "*",
+    "requirejs": "*",
+    "bower": "*",
+    "sugar": "*",
+    "babel": "*",
+    "gulp": "*",
+    "gulp-filter": "*",
+    "gulp-babel": "*",
+    "gulp-watch": "*",
+    "gulp-sass": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-jade": "*",
+    "gulp-env": "*",
+    "gulp-connect": "*",
+    "gulp-changed": "*",
+    "gulp-svgmin": "*",
+    "gulp-svgstore": "*",
+    "gulp-plumber": "*",
+    "gulp-rename": "*"
+  }
+}
