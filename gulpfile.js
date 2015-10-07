@@ -84,6 +84,19 @@ gulp.task('jade', function () {
         .pipe(gulp.dest(out))
 });
 
+gulp.task('copy', function () {
+    gulp.src(src + "/**/*.*")
+        .pipe(watch(src + "/**/*.*"))
+        .pipe(filter(['**',
+            '!**/*.js',
+            '!**/*.jade',
+            '!**/*.svg',
+            '!**/*.scss'
+        ]))
+        .pipe(plumber())
+        .pipe(gulp.dest(out))
+});
+
 gulp.task('env', function () {
     env({
         vars: {
@@ -117,4 +130,4 @@ gulp.task('watch-all',function(){
     gulp.watch(src+"/images/svg/**/*.svg",['svg']);
 });
 
-gulp.task('watch', ['env', 'babel', 'sass:dev', 'svg', 'bower', 'jade', 'connect', 'watch-all']);
+gulp.task('watch', ['env', 'babel', 'sass:dev', 'svg', 'bower', 'jade', 'copy', 'connect', 'watch-all']);
