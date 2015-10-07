@@ -28,7 +28,11 @@
     "vinyl-buffer": "*",
     "lodash.assign": "*",
     "popmotion": "*",
-    "pixi.js": "*",
-    "bezier": "*"
+    "pixi.js": "3.0.0",
+    "brfs": "*",
+    "polygon": "*",
+    "bezier": "*",
+    "seedrandom": "*",
+    "euclidean-distance": "*"
   }
 }
