@@ -21,6 +21,14 @@
     "gulp-svgmin": "*",
     "gulp-svgstore": "*",
     "gulp-plumber": "*",
-    "gulp-rename": "*"
+    "gulp-rename": "*",
+    "gulp-util": "*",
+    "browserify": "*",
+    "vinyl-source-stream": "*",
+    "vinyl-buffer": "*",
+    "lodash.assign": "*",
+    "popmotion": "*",
+    "pixi.js": "*",
+    "bezier": "*"
   }
 }

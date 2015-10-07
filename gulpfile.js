@@ -1,3 +1,4 @@
+var browserify = require('browserify');
 var gulp = require('gulp');
 var filter = require('gulp-filter');
 var babel = require('gulp-babel');
@@ -13,9 +14,29 @@ var svgmin = require('gulp-svgmin');
 var svgstore = require('gulp-svgstore');
 var rename = require('gulp-rename');
 var plumber = require('gulp-plumber');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var assign = require('lodash.assign');
+var gutil = require('gulp-util');
 
 var src = 'app';
 var out = 'dist';
+
+gulp.task('js', bundle); // so you can run `gulp js` to build the file
+
+function bundle() {
+    return browserify(out+'/js/basic.js').bundle()
+        // log errors if they happen
+        .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+        .pipe(source('js/bundle.js'))
+        // optional, remove if you don't need to buffer file contents
+        .pipe(buffer())
+        // optional, remove if you dont want sourcemaps
+        .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+        // Add transformation tasks to the pipeline here.
+        .pipe(sourcemaps.write('./')) // writes .map file
+        .pipe(gulp.dest(out));
+}
 
 gulp.task('babel', function () {
     var bowerFilesFilter = filter(['**', '!bower/**']);
@@ -34,7 +55,6 @@ gulp.task('babel', function () {
             experimental: true,
             loose: "all",
             optional: [
-                "minification.constantFolding",
                 "minification.deadCodeElimination",
                 "minification.memberExpressionLiterals",
                 "minification.propertyLiterals",
@@ -128,6 +148,7 @@ gulp.task('connect', function () {
 gulp.task('watch-all',function(){
     gulp.watch(src+"/**/*.scss",['sass:dev']);
     gulp.watch(src+"/images/svg/**/*.svg",['svg']);
+    gulp.watch(out+"/js/basic.js",['js']);
 });
 
-gulp.task('watch', ['env', 'babel', 'sass:dev', 'svg', 'bower', 'jade', 'copy', 'connect', 'watch-all']);
+gulp.task('watch', ['env', 'sass:dev', 'svg', 'bower', 'jade', 'copy', 'babel' ,'js', 'connect', 'watch-all']);
