@@ -8,18 +8,20 @@ require('sugar')
 var renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight,{backgroundColor : 0xF0F8FF});
 document.body.appendChild(renderer.view);
 
-// create the root of the scene graph
 var stage = new PIXI.Container();
 var points = [];
 var sorted_points_indexes = [];
+var sortedPoints = [];
+var sorted_points_corrected = [];
 var max_points = 15;
-var frame_pixels = 50;
+var borderPixels = 50;
+var Full360 = Math.PI * 2;
 
 var randomGenerator = seedrandom(location.hash);
 
 for (var i = 0; i < max_points; i++)
 {
-    points.push({'x': frame_pixels + (randomGenerator() * (window.innerWidth - 2 * frame_pixels)), 'y': frame_pixels + (randomGenerator() * (window.innerHeight - 2 * frame_pixels))})
+    points.push({'x': borderPixels + (randomGenerator() * (window.innerWidth - 2 * borderPixels)), 'y': borderPixels + (randomGenerator() * (window.innerHeight - 2 * borderPixels))})
 }
 
 sorted_points_indexes.push(0)
@@ -39,8 +41,8 @@ while (sorted_points_indexes.length < max_points) {
 }
 
 
-var sorted_points_corrected = [];
-var sortedPoints = sorted_points_indexes.map((i)=>points[i]);
+
+sortedPoints = sorted_points_indexes.map((i)=>points[i]);
 sortedPoints.each(
     (value,index)=>{
         sorted_points_corrected.push(value);
@@ -55,25 +57,6 @@ sortedPoints.each(
 })
 
 var sorted_points_indexes_without_first = sorted_points_indexes.clone().removeAt(0)
-
-var g = new PIXI.Graphics();
-stage.addChild(g)
-
-// create a texture from an image path
-var texture = PIXI.Texture.fromImage('img/kapsel.png');
-
-// create a new Sprite using the texture
-var kapsel = new PIXI.Sprite(texture);
-
-// center the sprite's anchor point
-kapsel.anchor.x = 0.5;
-kapsel.anchor.y = 0.5;
-
-// move the sprite to the center of the screen
-kapsel.position.x = 200;
-kapsel.position.y = 150;
-
-stage.addChild(kapsel);
 
 var xbezier = [];
 var ybezier = [];
@@ -91,15 +74,29 @@ for (var t = 0; t <= 1; t += 0.01) {
     });
 }
 
-for(let i=0; i<sortedPoints.length;i++) {
-    var text = new PIXI.Text(i)
-    text.x = sortedPoints[i].x + 15
-    text.y = sortedPoints[i].y - 15
-    stage.addChild(text)
+var kapselTexture = PIXI.Texture.fromImage('img/kapsel.png');
+
+var kapsel = new PIXI.Sprite(kapselTexture);
+
+renderRoad();
+renderPoints();
+renderKapsel();
+animate();
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    kapsel.rotation = (kapsel.rotation + 0.1)
+    if(kapsel.rotation> Full360){
+        kapsel.rotation = kapsel.rotation-Full360;
+    }
+
+    // render the container
+    renderer.render(stage);
 }
 
-var renderPoints = function() {
-
+function renderPoints() {
+    var g = new PIXI.Graphics();
     g.clear();
     g.lineStyle(2,0xffc2c2);
     g.moveTo(sorted_points_indexes[0].x,sorted_points_indexes[0].y);
@@ -113,32 +110,28 @@ var renderPoints = function() {
         g.drawCircle(superPoints[i].x,superPoints[i].y,10);
         g.endFill();
     }
+    stage.addChild(g)
 }
 
-var Full360 = Math.PI * 2;
 
-renderPoints();
-// start animating
-animate();
+function renderRoad() {
+    var strip = new PIXI.mesh.Rope(PIXI.Texture.fromImage('img/road.jpg'), superPoints);
+    stage.addChild(strip);
+}
 
-var strip = new PIXI.mesh.Rope(PIXI.Texture.fromImage('img/snake.png'), superPoints);
-stage.addChild(strip);
+function renderKapsel() {
+    kapsel.anchor.x = 0.5;
+    kapsel.anchor.y = 0.5;
 
-kapsel.x = points[0].x
-kapsel.y = points[0].y
+    kapsel.position.x = superPoints[1].x
+    kapsel.position.y = superPoints[1].y
 
-strip.position.x = 0
-strip.position.y = 0
+    stage.addChild(kapsel);
+}
 
-function animate() {
-    requestAnimationFrame(animate);
-
-    kapsel.rotation = (kapsel.rotation + 0.1)
-    if(kapsel.rotation> Full360){
-        kapsel.rotation = kapsel.rotation-Full360;
+var myActor = new popmotion.Actor({
+    onUpdate: function (output) {
+        console.log(output);
     }
-
-    // render the container
-    renderer.render(stage);
-}
+});
 
