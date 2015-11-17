@@ -1,3 +1,3 @@
 # Example
 
-http://michalkniotek.github.io/kapsle/dist/index.html
+http://michalkniotek.github.io/kapsle
