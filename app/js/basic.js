@@ -78,6 +78,22 @@ var kapselTexture = PIXI.Texture.fromImage('img/kapsel.png');
 
 var kapsel = new PIXI.Sprite(kapselTexture);
 
+
+var actorKapsel = new popmotion.Actor({
+    onUpdate: function (output) {
+        console.log(output);
+    }
+});
+
+var tween = new popmotion.Tween({
+    values: {
+        x: 300,
+        y: 300
+    }
+});
+
+actorKapsel.start(tween)
+
 renderRoad();
 renderPoints();
 renderKapsel();
@@ -129,9 +145,5 @@ function renderKapsel() {
     stage.addChild(kapsel);
 }
 
-var myActor = new popmotion.Actor({
-    onUpdate: function (output) {
-        console.log(output);
-    }
-});
+
 
