@@ -52,21 +52,7 @@ gulp.task('babel', function () {
         .pipe(minifiedFilter)
         .pipe(sourcemaps.init())
         .pipe(babel({
-            experimental: true,
-            loose: "all",
-            optional: [
-                "minification.deadCodeElimination",
-                "minification.memberExpressionLiterals",
-                "minification.propertyLiterals",
-                "strict",
-                "react",
-                "optimisation.flow.forOf",
-                "spec.undefinedToVoid",
-                "utility.inlineEnvironmentVariables",
-                "es7.doExpressions",
-                "es7.functionBind",
-                "es7.objectRestSpread",
-                "es7.exponentiationOperator"
+            plugins: [
             ]
         }))
         .pipe(sourcemaps.write())
