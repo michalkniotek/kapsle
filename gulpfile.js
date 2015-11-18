@@ -52,6 +52,9 @@ gulp.task('babel', function () {
         .pipe(minifiedFilter)
         .pipe(sourcemaps.init())
         .pipe(babel({
+            presets: [
+              'es2015'
+            ],
             plugins: [
             ]
         }))
