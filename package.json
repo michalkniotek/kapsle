@@ -8,6 +8,7 @@
     "bower": "*",
     "sugar": "*",
     "babel": "*",
+    "babel-preset-es2015": "*",
     "gulp": "*",
     "gulp-filter": "*",
     "gulp-babel": "*",
